@@ -1,25 +1,30 @@
-[ User ] → Internet → [ DNS resolves www.foobar.com → 8.8.8.8 ]
+[ User ]
+   ↓
+[ DNS ]
+  foobar.com
+   ↓
+[ SSL (HTTPS) ]
+   ↓
+[ Load Balancer ]
+  HAProxy
+   ↓
+ ┌────────────┬────────────┬────────────┐
+ │            │            │            │
+▼            ▼            ▼
+[ Firewall A ]  [ Firewall B ]  [ Firewall C ]
+     ↓              ↓               ↓
+[ Web Server A ] [ Web Server B ] [ Web Server C ]
+   NGINX           NGINX           NGINX
+     ↓              ↓               ↓
+[ Monitoring A ] [ Monitoring B ] [ Monitoring C ]
 
-                                ↓
-                      ┌──────────────────────────────┐
-                     │      LOAD BALANCER (LB)       │ (IP: 8.8.8.8)
-                     │         SSL Termination       │
-                     │         Firewall              │
-                     │         Monitoring Agent      │
-                     │          ( SumoLogic )        │
-                     │      HAProxy (HTTPS enabled)  │
-                     └────────────┬──────────────────┘
-                                  │
-              ┌──────────────────┴──────────────────┐
-              │                                     │
-   ┌──────────────────────────────┐    ┌──────────────────────────────┐
-   │          SERVER 1            │    │          SERVER 2            │
-   │         Firewall             │    │         Firewall             │
-   │   Nginx Web Server (HTTPS)   │    │   Nginx Web Server (HTTPS)   │
-   │   App Server (PHP/Python)    │    │   App Server (PHP/Python)    │
-   │   MySQL (Primary DB - Write) │    │   MySQL (Replica - Read)     │
-   │      Monitoring Agent        │    │     Monitoring Agent         │
-   └──────────────────────────────┘    └──────────────────────────────┘
+       ↓
+[ App Server ]
+  App files - code base
+       ↓
+[ Database ]
+   MySQL
+
 
 Specifics added to this infrastructure:
 
